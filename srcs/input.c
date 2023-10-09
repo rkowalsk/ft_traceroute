@@ -31,13 +31,15 @@ int	parse_parameter(char *arg, struct s_input *params)
 	while (arg[i])	
 	{
 		if (arg[i] == '?' || arg[i] == 'h')
+		{
 			params->help = 1;
+			break;
+		}
 		else if (arg[i] == 'v')
 			params->verbose = 1;
 		else
 		{
 			print_unknown_param(arg[i]);
-			params->help = 1;
 			ret = 1;
 			break;
 		}
@@ -45,7 +47,6 @@ int	parse_parameter(char *arg, struct s_input *params)
 	}
 	if (i == 1)
 		params->help = 1;
-	// dprintf(1, "parameter: '%s'\n", arg);
 	return (ret);
 }
 
@@ -53,7 +54,6 @@ void	parse_destination(char *arg, struct s_input *params)
 {
 	if (params->destination == NULL)
 		params->destination = arg;
-	dprintf(1, "destination: '%s'\n", arg);
 }
 
 int	parse_input(int argc, char **argv, struct s_input *params)

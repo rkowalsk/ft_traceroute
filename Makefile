@@ -2,11 +2,19 @@ NAME = ft_ping
 
 HEADERS_DIR = includes
 
-HEADERS = $(HEADERS_DIR)/libft.h
+HEADERS =	$(HEADERS_DIR)/libft.h \
+			$(HEADERS_DIR)/ft_ping.h
 
 LIBFT_FILE = $(HEADERS_DIR)/libft.a
 
 SRCS =	srcs/main.c \
+		srcs/socket.c \
+		srcs/ping.c \
+		srcs/ping_recv.c \
+		srcs/ping_recv_success.c \
+		srcs/ping_send.c \
+		srcs/utils.c \
+		srcs/signal.c \
 		srcs/input.c
 
 OBJS = ${SRCS:.c=.o}
