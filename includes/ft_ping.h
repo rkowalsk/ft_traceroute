@@ -57,13 +57,14 @@ void	print_usage(void);
 int		create_socket(struct s_input params);
 void	print_addrinfo(struct addrinfo servinfos);
 int		ping_loop(int verbose);
-struct timeval	receive_echo_reply(int verbose);
-struct timeval	send_echo_request(uint16_t sequence);
+float	receive_echo_reply(int verbose);
+void	send_echo_request(int signal);
 double	sqrt(double input);
 int		perror_ret(const char *func);
 int		free_all(int sock_fd, struct addrinfo *servinfo);
 void	stats_and_exit(int signal);
-void	print_recv(struct msghdr msg, int verbose, ssize_t ret);
+float	print_recv(struct msghdr msg, int verbose, ssize_t ret,
+													struct timeval tv_after);
 
 extern int				g_sock_fd;
 extern struct addrinfo	*g_servinfos;

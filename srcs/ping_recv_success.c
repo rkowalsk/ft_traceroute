@@ -30,23 +30,45 @@ unsigned short	get_ttl(struct msghdr msg_hdr)
 	return (ttl);
 }
 
-void	print_recv(struct msghdr msg, int verbose, ssize_t ret)
+float	sub_timevals(struct timeval before, struct timeval after)
 {
-	struct icmphdr		icmp_hdr;
-	uint16_t			sequence;
-	char				p_ip[INET6_ADDRSTRLEN];
+	float	diff;
+
+	diff = (after.tv_sec - before.tv_sec) * 1000;
+	diff += (float)(after.tv_usec - before.tv_usec) / 1000;
+	return (diff);
+}
+
+void	get_ip_from_msghdr(struct msghdr msg, char *p_ip)
+{
 	struct sockaddr_in	*net_ip;
 
-	if (msg.msg_iovlen < 1 ||msg.msg_iov[0].iov_len < sizeof(icmp_hdr))
-	{
-		dprintf(2, "error: iov received too small\n");
-		return ;
-	}
-	ft_memcpy(&icmp_hdr, msg.msg_iov[0].iov_base, sizeof(icmp_hdr));
-	sequence = ntohs(icmp_hdr.un.echo.sequence);
-	verbose_first_line(ntohs(icmp_hdr.un.echo.id), sequence, verbose);
 	net_ip = (struct sockaddr_in *)(msg.msg_name);
 	inet_ntop(net_ip->sin_family, &(net_ip->sin_addr), p_ip, INET6_ADDRSTRLEN);
+}
+
+float	print_recv(struct msghdr msg, int verbose, ssize_t ret,
+														struct timeval tv_after)
+{
+	char				p_ip[INET6_ADDRSTRLEN];
+	struct icmphdr		icmp_hdr;
+	uint16_t			seq;
+	struct timeval		tv_before;
+	float				diff;
+
+	if (msg.msg_iovlen < 1 || msg.msg_iov[0].iov_len < sizeof(icmp_hdr))
+	{
+		dprintf(2, "error: iov received too small (wtf)\n");
+		return (0);
+	}
+	ft_memcpy(&icmp_hdr, msg.msg_iov[0].iov_base, sizeof(icmp_hdr));
+	ft_memcpy(&tv_before, msg.msg_iov[0].iov_base + sizeof(icmp_hdr),
+														sizeof(struct timeval));
+	seq = ntohs(icmp_hdr.un.echo.sequence);
+	verbose_first_line(ntohs(icmp_hdr.un.echo.id), seq, verbose);
+	get_ip_from_msghdr(msg, p_ip);
 	dprintf(1, "%ld bytes from %s: ", ret, p_ip);
-	dprintf(1, "icmp_seq=%hd ttl=%hd ", sequence, get_ttl(msg));
+	diff = sub_timevals(tv_before, tv_after);
+	dprintf(1, "icmp_seq=%hd ttl=%hd time=%.3fms\n", seq, get_ttl(msg), diff);
+	return (diff);
 }

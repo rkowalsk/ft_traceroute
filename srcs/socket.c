@@ -21,16 +21,18 @@ void	setup_hints(struct addrinfo *hints)
 
 int	set_socket_options(int sock_fd)
 {
-	struct timeval	tv;
-	int 			yes;
+	// struct timeval	tv;
+	int	yes;
 
 	yes = 1;
 	if (setsockopt(sock_fd, IPPROTO_IP, IP_RECVTTL, &yes, sizeof(yes)))
 		return (-1);
-	tv.tv_sec = 1;
-	tv.tv_usec = 0;
-	if (setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)))
+	if (setsockopt(sock_fd, IPPROTO_IP, IP_RECVERR, &yes, sizeof(yes)))
 		return (-1);
+	// tv.tv_sec = 1;
+	// tv.tv_usec = 0;
+	// if (setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)))
+	// 	return (-1);
 	return (0);
 }
 

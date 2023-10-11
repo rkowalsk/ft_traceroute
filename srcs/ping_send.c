@@ -1,32 +1,42 @@
 #include "ft_ping.h"
 
-// with data
-// returns the timeval captured right before (or right after) the package was sent
-struct timeval	send_echo_request(uint16_t sequence)
+void	create_packet(char *packet)
 {
-	char			data[] = "la bite halala des barres";
 	struct timeval	tv_before;
 	struct icmphdr	icmp_hdr;
-	char			packet[sizeof(struct icmphdr) + ft_strlen(data)];
-	ssize_t			ret;
 
-	if (sequence == 0)
-		dprintf(1, "%ld data bytes", ft_strlen(data));
 	ft_memset(&icmp_hdr, 0, sizeof(icmp_hdr));
 	icmp_hdr.type = ICMP_ECHO;
-	icmp_hdr.un.echo.sequence = htons(sequence);
+	icmp_hdr.un.echo.sequence = htons(g_stats.transmitted);
 	ft_memcpy(packet, &icmp_hdr, sizeof(icmp_hdr));
-	ft_memcpy(packet + sizeof(icmp_hdr), data, ft_strlen(data));
-	ret = sendto(g_sock_fd, packet, sizeof(icmp_hdr) + ft_strlen(data), 0,
-		g_servinfos->ai_addr, g_servinfos->ai_addrlen);
 	gettimeofday(&tv_before, NULL);
-	if (ret <= 0)
+	ft_memcpy(packet + sizeof(icmp_hdr), &tv_before, sizeof(tv_before));
+}
+
+// with timeval in data
+void	send_echo_request(int signal)
+{
+	char			packet[sizeof(struct icmphdr) + sizeof(struct timeval)];
+	ssize_t			ret;
+
+	(void) signal;
+	if (g_stats.transmitted == 0)
+		dprintf(1, "%ld data bytes", sizeof(struct timeval));
+	create_packet(packet);
+	ret = sendto(g_sock_fd,
+		packet,
+		sizeof(struct icmphdr) + sizeof(struct timeval),
+		0,
+		g_servinfos->ai_addr,
+		g_servinfos->ai_addrlen);
+	if (ret >= 0)
+		g_stats.transmitted++; // used as sequence
+	else
 	{
-		if (ret < 0)
-			dprintf(2, "%s", strerror(errno));
-		tv_before.tv_sec = 0;
+		dprintf(2, "ping: %s\n", strerror(errno));
+		errno = 0;
 	}
-	return (tv_before);
+	alarm(1);
 }
 
 // without data

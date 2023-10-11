@@ -21,19 +21,24 @@ struct msghdr	create_msghdr()
 	return (msg);
 }
 
-struct timeval	receive_echo_reply(int verbose)
+float	receive_echo_reply(int verbose)
 {
 	ssize_t			ret;
 	struct msghdr	msg;
 	struct timeval	tv_after;
+	float			diff;
 
 	msg = create_msghdr();
 	ret = recvmsg(g_sock_fd, &msg, 0);
 	gettimeofday(&tv_after, NULL);
 	if (ret > 0)
-		print_recv(msg, verbose, ret);
+		diff = print_recv(msg, verbose, ret, tv_after);
 	else
-		tv_after.tv_sec = ret;
-	dprintf(1, "recv ret: %ld\n", ret);
-	return (tv_after);
+	{
+		diff = 0;
+		dprintf(2, "recv ret: %ld\n", ret);
+		dprintf(2, "recvmsg: %s\n", strerror(errno));
+		errno = 0;
+	}
+	return (diff);
 }

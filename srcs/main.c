@@ -20,8 +20,7 @@ int main(int argc, char **argv)
 	if (ret)
 		return (ret);
 	print_addrinfo(*g_servinfos);
-	if (signal(SIGINT, &stats_and_exit) == SIG_ERR
-										|| signal(SIGALRM, SIG_IGN) == SIG_ERR)
+	if (signal(SIGINT, &stats_and_exit) == SIG_ERR)
 	{
 		free_all(g_sock_fd, g_servinfos);
 		return (perror_ret("signal"));
