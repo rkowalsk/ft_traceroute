@@ -8,7 +8,7 @@ void	stats_and_exit(int signal)
 
 	(void) signal;
 	dprintf(1, "--- %s ping statistics ---\n", g_servinfos->ai_canonname);
-	loss = ((float) g_stats.received / (float) g_stats.transmitted) * 100;
+	loss = 100 - ((float) g_stats.received / (float) g_stats.transmitted) * 100;
 	dprintf(1,	"%zu packets transmitted, %zu packets received,",
 										g_stats.transmitted, g_stats.received);
 	dprintf(1, " %zu%% package loss\n", loss);
