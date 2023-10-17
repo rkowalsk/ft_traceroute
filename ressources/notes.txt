@@ -1,4 +1,0 @@
-on peut socket(PF_INET, SOCK_DGRAM, IPPROTO_ICMP) depuis
-	https://lwn.net/Articles/420800/ (bon thread slack: https://42born2code.slack.com/archives/CMX2R5JSW/p1634337708085600?thread_ts=1634306922.079700&cid=CMX2R5JSW)
-
-SOCK_DGRAM ou SOCK_RAW ? (raw besoin d'etre root ?)

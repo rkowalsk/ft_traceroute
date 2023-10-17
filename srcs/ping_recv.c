@@ -1,11 +1,9 @@
 #include "ft_ping.h"
 
-struct msghdr	create_msghdr()
+struct msghdr	create_msghdr(struct iovec *iov, char *iov_buffer,
+															char *ctl_buffer)
 {
 	struct msghdr	msg;
-	struct iovec	iov[1];
-	char			iov_buffer[RECV_BUFF_SIZE];
-	char			ctl_buffer[RECV_BUFF_SIZE];
 
 	ft_memset(&msg, 0, sizeof(msg));
 	ft_memset(iov_buffer, 0, RECV_BUFF_SIZE);
@@ -24,21 +22,28 @@ struct msghdr	create_msghdr()
 float	receive_echo_reply(int verbose)
 {
 	ssize_t			ret;
-	struct msghdr	msg;
 	struct timeval	tv_after;
 	float			diff;
+	struct msghdr	msg;
+	struct iovec	iov[1];
+	char			iov_buffer[RECV_BUFF_SIZE];
+	char			ctl_buffer[RECV_BUFF_SIZE];
 
-	msg = create_msghdr();
+	msg = create_msghdr(iov, iov_buffer, ctl_buffer);
 	ret = recvmsg(g_sock_fd, &msg, 0);
-	gettimeofday(&tv_after, NULL);
 	if (ret > 0)
-		diff = print_recv(msg, verbose, ret, tv_after);
+	{
+		gettimeofday(&tv_after, NULL);
+		diff = print_recv_success(msg, verbose, ret, tv_after);
+	}
 	else
 	{
 		diff = 0;
-		dprintf(2, "recv ret: %ld\n", ret);
-		dprintf(2, "recvmsg: %s\n", strerror(errno));
-		errno = 0;
+		ret = recvmsg(g_sock_fd, &msg, MSG_ERRQUEUE);
+		if (ret <= 0)
+			dprintf(2, "MSG_ERRQUEUE but je peux pas lire ????\n");
+		else
+			print_recv_error(msg, verbose, ret);
 	}
 	return (diff);
 }

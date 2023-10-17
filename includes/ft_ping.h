@@ -11,6 +11,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <signal.h>
+#include <linux/errqueue.h>
 
 #define RECV_BUFF_SIZE 1024
 
@@ -31,27 +32,6 @@ struct				s_stats
 	float	max;
 };
 
-// struct icmphdr
-// {
-//   uint8_t type;         /* message type */
-//   uint8_t code;         /* type sub-code */
-//   uint16_t checksum;
-//   union
-//   {
-//     struct
-//     {
-//       uint16_t  id;
-//       uint16_t  sequence;
-//     } echo;                     /* echo datagram */
-//     uint32_t    gateway;        /* gateway address */
-//     struct
-//     { 
-//       uint16_t  __glibc_reserved;
-//       uint16_t  mtu;
-//     } frag;                     /* path mtu discovery */
-//   } un;
-// };
-
 int		parse_input(int argc, char **argv, struct s_input *params);
 void	print_usage(void);
 int		create_socket(struct s_input params);
@@ -63,9 +43,13 @@ double	sqrt(double input);
 int		perror_ret(const char *func);
 int		free_all(int sock_fd, struct addrinfo *servinfo);
 void	stats_and_exit(int signal);
-float	print_recv(struct msghdr msg, int verbose, ssize_t ret,
+float	print_recv_success(struct msghdr msg, int verbose, ssize_t ret,
 													struct timeval tv_after);
+void	print_recv_error(struct msghdr msg, int verbose, ssize_t ret);
+void	verbose_first_line(uint16_t id, uint16_t sequence, int verbose);
+void	get_ip_from_msghdr(struct msghdr msg, char *p_ip);
 
 extern int				g_sock_fd;
+extern int				g_verbose;
 extern struct addrinfo	*g_servinfos;
 extern struct s_stats	g_stats;

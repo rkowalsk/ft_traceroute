@@ -1,23 +1,12 @@
 #include "ft_ping.h"
 
-void	verbose_first_line(uint16_t id, uint16_t sequence, int verbose)
-{
-	if (sequence == 0)
-	{
-		if (verbose)
-			dprintf(1, ", id 0x%x = %d\n", id, id);
-		else
-			dprintf(1, "\n");
-	}
-}
-
-unsigned short	get_ttl(struct msghdr msg_hdr)
+unsigned short	get_ttl(struct msghdr msg)
 {
 	int				ttl;
 	struct cmsghdr	*cmsg;
 
 	ttl = -1;
-	cmsg = CMSG_FIRSTHDR(&msg_hdr);
+	cmsg = CMSG_FIRSTHDR(&msg);
 	while (cmsg != NULL)
 	{
 		if (cmsg->cmsg_level == IPPROTO_IP && cmsg->cmsg_type == IP_TTL)
@@ -25,7 +14,7 @@ unsigned short	get_ttl(struct msghdr msg_hdr)
 			memcpy(&ttl, CMSG_DATA(cmsg), sizeof(ttl));
 			break;
 		}
-		cmsg = CMSG_NXTHDR(&msg_hdr, cmsg);
+		cmsg = CMSG_NXTHDR(&msg, cmsg);
 	}
 	return (ttl);
 }
@@ -39,15 +28,7 @@ float	sub_timevals(struct timeval before, struct timeval after)
 	return (diff);
 }
 
-void	get_ip_from_msghdr(struct msghdr msg, char *p_ip)
-{
-	struct sockaddr_in	*net_ip;
-
-	net_ip = (struct sockaddr_in *)(msg.msg_name);
-	inet_ntop(net_ip->sin_family, &(net_ip->sin_addr), p_ip, INET6_ADDRSTRLEN);
-}
-
-float	print_recv(struct msghdr msg, int verbose, ssize_t ret,
+float	print_recv_success(struct msghdr msg, int verbose, ssize_t ret,
 														struct timeval tv_after)
 {
 	char				p_ip[INET6_ADDRSTRLEN];
@@ -69,6 +50,8 @@ float	print_recv(struct msghdr msg, int verbose, ssize_t ret,
 	get_ip_from_msghdr(msg, p_ip);
 	dprintf(1, "%ld bytes from %s: ", ret, p_ip);
 	diff = sub_timevals(tv_before, tv_after);
+	if (verbose)
+		dprintf(1, "type=%d code=%d ", icmp_hdr.type, icmp_hdr.code);
 	dprintf(1, "icmp_seq=%hd ttl=%hd time=%.3fms\n", seq, get_ttl(msg), diff);
 	return (diff);
 }

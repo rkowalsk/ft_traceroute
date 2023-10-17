@@ -1,6 +1,7 @@
 #include "ft_ping.h"
 
 int				g_sock_fd;
+int				g_verbose;
 struct addrinfo	*g_servinfos;
 struct s_stats	g_stats;
 
@@ -19,6 +20,7 @@ int main(int argc, char **argv)
 	ret = create_socket(params);
 	if (ret)
 		return (ret);
+	g_verbose = params.verbose;
 	print_addrinfo(*g_servinfos);
 	if (signal(SIGINT, &stats_and_exit) == SIG_ERR)
 	{

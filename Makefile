@@ -12,6 +12,8 @@ SRCS =	srcs/main.c \
 		srcs/ping.c \
 		srcs/ping_recv.c \
 		srcs/ping_recv_success.c \
+		srcs/ping_recv_error.c \
+		srcs/ping_recv_utils.c \
 		srcs/ping_send.c \
 		srcs/utils.c \
 		srcs/signal.c \

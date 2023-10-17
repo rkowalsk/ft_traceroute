@@ -36,7 +36,6 @@ int	ping_loop(int verbose)
 	while (1)
 	{
 		diff = receive_echo_reply(verbose);
-		// dprintf(1, "received\n");
 		if (diff > 0)
 			store_time(diff);
 	}

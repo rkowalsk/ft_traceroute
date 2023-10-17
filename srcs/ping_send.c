@@ -13,7 +13,6 @@ void	create_packet(char *packet)
 	ft_memcpy(packet + sizeof(icmp_hdr), &tv_before, sizeof(tv_before));
 }
 
-// with timeval in data
 void	send_echo_request(int signal)
 {
 	char			packet[sizeof(struct icmphdr) + sizeof(struct timeval)];
@@ -21,7 +20,12 @@ void	send_echo_request(int signal)
 
 	(void) signal;
 	if (g_stats.transmitted == 0)
-		dprintf(1, "%ld data bytes", sizeof(struct timeval));
+	{
+		if (g_verbose)
+			dprintf(1, "%ld data bytes", sizeof(struct timeval));
+		else
+			dprintf(1, "%ld data bytes\n", sizeof(struct timeval));
+	}
 	create_packet(packet);
 	ret = sendto(g_sock_fd,
 		packet,
@@ -38,22 +42,3 @@ void	send_echo_request(int signal)
 	}
 	alarm(1);
 }
-
-// without data
-// ssize_t	send_echo_request(int sock_fd, struct addrinfo servinfos,
-// 															uint16_t sequence)
-// {
-// 	struct icmphdr	icmp_hdr;
-// 	ssize_t			ret;
-// 	char			packet[sizeof(icmp_hdr)];
-
-// 	ft_memset(&icmp_hdr, 0, sizeof(icmp_hdr));
-// 	icmp_hdr.type = ICMP_ECHO;
-// 	icmp_hdr.un.echo.sequence = htons(sequence);
-// 	ft_memcpy(packet, &icmp_hdr, sizeof(icmp_hdr));
-// 	ret = sendto(sock_fd, packet, sizeof(icmp_hdr), 0, servinfos.ai_addr, servinfos.ai_addrlen);
-// 	dprintf(1, "sendto success: ret: %zd\nseq: %d\n", ret, sequence);
-// 	if (ret < 0)
-// 		dprintf(2, "sendto error: %s", strerror(errno));
-// 	return (ret);
-// }
