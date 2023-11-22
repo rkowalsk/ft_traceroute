@@ -1,4 +1,4 @@
-#include "ft_ping.h"
+#include "ft_traceroute.h"
 
 double	sqrt(double input)
 {
@@ -19,10 +19,29 @@ int	perror_ret(const char *func)
 	return(2);
 }
 
-int	free_all(int sock_fd, struct addrinfo *servinfos)
+int	free_s_net(struct s_net net)
 {
-	freeaddrinfo(servinfos);
-	if (close(sock_fd))
+	int	error = 0;
+	freeaddrinfo(net.s_info);
+	if (net.s_sockfd >= 0)
+		error += close(net.s_sockfd);
+	if (net.r_sockfd >= 0)
+		error += close(net.r_sockfd);
+	net.r_sockfd = -1;
+	net.s_sockfd = -1;
+	if (error)
 		return (perror_ret("close"));
 	return (0);
+}
+
+// len is max_ttl - first_ttl + 1 OR until the failed malloc
+void	free_results(struct s_probe **results, int len)
+{
+	int	i = 0;
+	if (results)
+	{
+		while (i < len)
+			free(results[i++]);
+		free(results);
+	}
 }

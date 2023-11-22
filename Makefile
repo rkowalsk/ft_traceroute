@@ -1,23 +1,27 @@
-NAME = ft_ping
+NAME = ft_traceroute
 
 HEADERS_DIR = includes
 
 HEADERS =	$(HEADERS_DIR)/libft.h \
-			$(HEADERS_DIR)/ft_ping.h
+			$(HEADERS_DIR)/ft_traceroute.h
 
 LIBFT_FILE = $(HEADERS_DIR)/libft.a
 
 SRCS =	srcs/main.c \
-		srcs/socket.c \
-		srcs/ping.c \
-		srcs/ping_recv.c \
-		srcs/ping_recv_success.c \
-		srcs/ping_recv_error.c \
-		srcs/ping_recv_utils.c \
-		srcs/ping_send.c \
+		srcs/create_socket.c \
 		srcs/utils.c \
-		srcs/signal.c \
-		srcs/input.c
+		srcs/trace_the_route.c \
+		srcs/traceroute_send.c \
+		srcs/traceroute_recv.c \
+		srcs/cli_prints.c \
+		srcs/cli.c
+		# srcs/signal.c \
+		# srcs/ping.c \
+		# srcs/ping_recv.c \
+		# srcs/ping_recv_success.c \
+		# srcs/ping_recv_error.c \
+		# srcs/ping_recv_utils.c \
+		# srcs/ping_send.c \
 
 OBJS = ${SRCS:.c=.o}
 
