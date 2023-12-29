@@ -34,7 +34,6 @@ struct	s_params
 	unsigned int	squeries; // default 16
 	in_port_t		port; // default 33434
 	unsigned int	nqueries; // default 3
-	// read timeout
 };
 
 struct	s_net
@@ -69,13 +68,3 @@ int		recv_batch(size_t to_recv, struct s_probe **results, struct s_net net,
 														struct s_params params);
 ssize_t	send_batch(struct s_probe **results, struct s_net net,
 	struct s_params *params, size_t *queries, size_t max_queries, int *port);
-// int		ping_loop(int verbose);
-// float	receive_echo_reply(int verbose);
-// void	send_echo_request(int signal);
-// double	sqrt(double input);
-// void	stats_and_exit(int signal);
-// float	print_recv_success(struct msghdr msg, int verbose, ssize_t ret,
-// 													struct timeval tv_after);
-// void	print_recv_error(struct msghdr msg, int verbose, ssize_t ret);
-// void	verbose_first_line(uint16_t id, uint16_t sequence, int verbose);
-// void	get_ip_from_msghdr(struct msghdr msg, char *p_ip);
