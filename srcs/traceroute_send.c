@@ -19,6 +19,20 @@ int	send_packet(struct s_net net, int ttl, int port)
 	return (ret);
 }
 
+int	send_sleep(unsigned int sendwait)
+{
+	int	ret = 0;
+	if (!sendwait)
+		return (0);
+	if (sendwait <= 10)
+		sleep(sendwait);
+	else
+		ret = usleep(sendwait * 1000);
+	if (ret < 0)
+		dprintf(2, "usleep: %s\n", strerror(errno));
+	return (ret);
+}
+
 ssize_t	send_batch(struct s_probe **results, struct s_net net,
 		struct s_params *params, size_t *queries, size_t max_queries, int *port)
 {
@@ -30,6 +44,8 @@ ssize_t	send_batch(struct s_probe **results, struct s_net net,
 	while (i < params->squeries && *queries < max_queries)
 	{
 		ttl = (*queries / params->nqueries) + params->first_ttl;
+		if (send_sleep(params->sendwait))
+			return (-1);
 		if (send_packet(net, ttl, *port) < 0)
 			return (-1);
 		(*port)++;

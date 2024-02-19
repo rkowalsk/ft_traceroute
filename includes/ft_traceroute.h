@@ -34,6 +34,7 @@ struct	s_params
 	unsigned int	squeries; // default 16
 	in_port_t		port; // default 33434
 	unsigned int	nqueries; // default 3
+	unsigned int	sendwait; // default 0
 };
 
 struct	s_net

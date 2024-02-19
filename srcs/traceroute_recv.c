@@ -115,7 +115,7 @@ int	recv_batch(size_t to_recv, struct s_probe **results, struct s_net net,
 	struct timeval	tv;
 	int				ret;
 
-	tv.tv_sec = 5;
+	tv.tv_sec = 2;
 	tv.tv_usec = 0;
 	if (set_timeout(net.r_sockfd, tv))
 		return (1);

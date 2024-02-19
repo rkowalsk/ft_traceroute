@@ -14,6 +14,10 @@ void	print_usage(void)
 	printf("Set the number of probes per each hop (default is 3)\n");
 	printf("  -p port       ");
 	printf("Set the destination port to use (incremented by each probe, default is 33434)\n");
+	printf("  -z sendwait   ");
+	printf("Minimal time interval between probes (default 0).\n");
+	printf("                If the value is more than 10, then it specifies a\n");
+	printf("                number in milliseconds, else it is a number of seconds\n");
 }
 
 void	print_unknown_param(char *unknown_param, int argc)

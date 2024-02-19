@@ -122,6 +122,22 @@ int	parse_parameter(int argc, char **argv, int *i, struct s_params *params)
 		params->port = arg;
 		return (0);
 	}
+	else if (!ft_strcmp(argv[*i], "-z"))
+	{
+		(*i)++;
+		if (*i >= argc)
+		{
+			print_missing_arg(*i - 1, 'z', "sendwait");
+			return (1);
+		}
+		if (parse_num_arg(argv[*i], &arg))
+		{
+			print_bad_arg(*i, 'z', argv[*i]);
+			return (1);
+		}
+		params->sendwait = arg;
+		return (0);
+	}
 	else
 	{
 		print_unknown_param(argv[*i], *i);
@@ -142,6 +158,7 @@ void	default_values(struct s_params *params)
 	params->squeries = 16;
 	params->port = 33434;
 	params->nqueries = 3;
+	params->sendwait = 0;
 	params->destination = NULL;
 	params->help = 0;
 }
