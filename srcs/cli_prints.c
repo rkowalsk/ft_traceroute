@@ -16,7 +16,8 @@ void	print_usage(void)
 	printf("Set the destination port to use (incremented by each probe, default is 33434)\n");
 	printf("  -z sendwait   ");
 	printf("Minimal time interval between probes (default 0).\n");
-	printf("                If the value is more than 10, then it specifies a\n");
+	printf("                Automatically sets squeries to 1, overriding any value set by -N.\n");
+	printf("                If the value of sendwait is more than 10, then it specifies a\n");
 	printf("                number in milliseconds, else it is a number of seconds\n");
 }
 

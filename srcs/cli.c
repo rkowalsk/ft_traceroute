@@ -214,5 +214,7 @@ int	parse_input(int argc, char **argv, struct s_params *params)
 	}
 	if (i == 1)
 		params->help = 1;
+	else if (params->sendwait > 0)
+		params->squeries = 1;
 	return (check_params(*params));
 }

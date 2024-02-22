@@ -49,5 +49,7 @@ You will need `make` and `gcc` to compile.
 - `-N squeries` Set the number of probes to be tried simultaneously (default is 16)
 - `-q nqueries` Set the number of probes per each hop (default is 3)
 - `-p port` Set the destination port to use (incremented by each probe, default is 33434)
-- `-z sendwait` Minimal time interval between probes (default 0). If the value is more than 10, then it specifies a number in milliseconds, else it is a number of seconds
+- `-z sendwait` Minimal time interval between probes (default 0).
+   Automatically sets squeries to 1, overriding any value set by -N.
+   If the value is more than 10, then it specifies a number in milliseconds, else it is a number of seconds
 - `--help` Show the help
