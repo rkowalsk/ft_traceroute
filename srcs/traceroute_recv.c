@@ -65,7 +65,6 @@ int	handle_response(char *buffer, int len, struct s_probe **results,
 					struct s_net net, struct s_params params,
 					struct sockaddr_in src, struct timeval tv)
 {
-	(void) net;
 	int			port;
 	in_addr_t	target;
 
@@ -82,7 +81,6 @@ int	handle_response(char *buffer, int len, struct s_probe **results,
 int	recv_reply(struct s_probe **results, struct s_net net,
 														struct s_params params)
 {
-	(void) results;
 	int					ret;
 	char				buffer[RECV_BUFF_SIZE];
 	struct sockaddr_in	src;

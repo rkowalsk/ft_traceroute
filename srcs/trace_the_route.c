@@ -64,7 +64,6 @@ int	print_batch(struct s_probe **results, struct s_params params,
 	size_t	batch;
 	size_t	query;
 	size_t	i;
-	(void) net;
 
 	i = queries - sent;
 	while (i < queries)
