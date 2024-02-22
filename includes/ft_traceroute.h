@@ -21,8 +21,8 @@
 // size of response without payload (it's not always received)
 // IPv4 header (20) + ICMP package (ICMP (8) + IP (20) + UDP(8))
 #define RECV_MIN_SIZE 56
-#define PAYLOAD "Fuck Big Brother"
-#define PAYLOAD_SIZE 16
+#define PAYLOAD "Free Assange"
+#define PAYLOAD_SIZE 12
 #define HOST_NAME_MAX 256
 
 struct	s_params
